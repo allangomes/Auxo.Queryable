@@ -20,9 +20,9 @@ begin
 
 Query Execute (Async)
 ```delphi
-procedure Execute(AExec: IQueryExecute)
+procedure Execute(AExec: IQueryExecute; AQuery: IQuery)
 begin
-  AExec[Query].ToListAsync( //When finished, will call callback function for each record.
+  AExec[AQuery].ToListAsync( //When finished, will call callback function for each record.
   procedure(customer: IRecord)
   begin
     ShowMessage(customer['Name']);
@@ -32,9 +32,9 @@ end;
 
 Query Execute and Set to AuxoDataSet (Async)
 ```delphi
-procedure ExecuteAndSetDataSet(AExec: IQueryExecute)
+procedure ExecuteAndSetDataSet(AExec: IQueryExecute; AQuery: IQuery)
 begin
-  AExec[Query].ToListAsync(
+  AExec[AQuery].ToListAsync(
   procedure(customers: IRecordList)
   begin
     dataset.Data := customers;
@@ -44,11 +44,11 @@ end
 
 Query Execute (Sync)
 ```delphi
-procedure ExecuteSync(AExec: IQueryExecute)
+procedure ExecuteSync(AExec: IQueryExecute; AQuery: IQuery)
 var
   customer: IRecord;
 begin
-  for customer in AExec[Query].ToList do
+  for customer in AExec[AQuery].ToList do
   begin
     ShowMessage(customer['Name']);
   end;
@@ -61,5 +61,5 @@ QueryExecute := TDBXQueryExecute.Create('localhost', TFirebirdQueryTranslator.Cr
 QueryExecute := TDBXQueryExecute.Create('localhost', TSQLServerQueryTranslator.Create));     //DBExpress e SQLServer
 QueryExecute := TMyApiQueryExecute.Create('localhost', TMyApiQueryTranslator.Create));      //MyApi e UrlParameters
 
-Execute(QueryExecute);
+Execute(QueryExecute, Query);
 ```
